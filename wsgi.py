@@ -40,13 +40,6 @@ def run_wsgi(host, port, workers):
     ApplicationLoader().run()
 
 
-def main():
-    run_wsgi(
-        host=os.getenv("APP_HOST", "localhost"),
-        port=os.getenv("APP_PORT", "8000"),
-        workers=os.getenv("WORKERS", "4"),
-    )
-
 if __name__ == "__main__":
     run_wsgi(
         host=os.getenv("APP_HOST", "localhost"),
