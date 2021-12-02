@@ -41,8 +41,9 @@ def run_wsgi(host, port, workers):
 
 
 if __name__ == "__main__":
+    print(os.environ.get("PORT", "8000"))
     run_wsgi(
-        host=os.getenv("APP_HOST", "localhost"),
-        port=os.getenv("APP_PORT", "8000"),
+        host=os.getenv("APP_HOST", "0.0.0.0"),
+        port=os.environ.get("PORT", "8000"),
         workers=os.getenv("WORKERS", "4"),
     )
