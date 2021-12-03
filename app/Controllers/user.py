@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
+from app.tools.get_database import get_db
 from app.tools.jwt_tool import get_current_active_user
 from app.Models import Users as UserModels
 from app.Schemas import Users as UserSchemas
-from app.tools.image_upload import image_upload
+from app.Crud import Users as UsersCrud
+
 user_route = APIRouter()
 
 
@@ -53,9 +56,9 @@ def read_users_me(current_user: UserModels.User = Depends(get_current_active_use
                         }
                     }
                 })
-def upload_avatar(image: UserSchemas.UserAvatar, current_user: UserModels.User = Depends(get_current_active_user)):
-    image_path = image_upload(image.image, 'avatars/', current_user.user_id)
-    current_user.image = image_path
-    response_object = {'user': current_user.user_dict(),
+def upload_avatar(image: UserSchemas.UserAvatar, current_user: UserModels.User = Depends(get_current_active_user),
+                  db: Session = Depends(get_db)):
+    response = UsersCrud.update_user_image(db=db, image=image.image, user_id=current_user.user_id)
+    response_object = {'user': response,
                        'success': True}
     return response_object

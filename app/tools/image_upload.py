@@ -1,9 +1,9 @@
-import base64
 import errno
-
-from app.Config import application
 import os
 import uuid
+import base64
+from cloudinary import uploader
+from app.Config import application
 
 
 def image_upload(image_json, folder: str, required_filename=None) -> str:
@@ -21,12 +21,14 @@ def image_upload(image_json, folder: str, required_filename=None) -> str:
     if required_filename is None:
         required_filename = str(uuid.uuid4().hex) + str(uuid.uuid4())
     image_name = str(required_filename) + '.' + image_extention
-
-    with open(os.path.join(application.UPLOAD_FOLDER, folder, image_name), 'wb') as image:
+    local_path = os.path.join(application.UPLOAD_FOLDER, folder, image_name)
+    with open(local_path, 'wb') as image:
         data = base64.b64decode(image_json['data'])
         image.write(data)
-    path_to_save = 'images/' + folder + image_name
-    return path_to_save
+    result = uploader.upload(local_path, overwrite=True, resource_type='image')
+    os.remove(local_path)
+    print(result['url'])
+    return result['url']
 
 
 def image_remove(path):

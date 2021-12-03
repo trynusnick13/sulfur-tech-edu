@@ -13,6 +13,15 @@ from app.Config.application import (
     VERSION
 )
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+  cloud_name="hqndlzoag",
+  api_key="585514832173685",
+  api_secret="ZEND6qDYgV-H6rQEJRp931vS-dw"
+)
 
 from fastapi.middleware.cors import CORSMiddleware
 

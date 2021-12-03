@@ -1,8 +1,9 @@
+import pytz
+import datetime as dt
 from sqlalchemy.orm import Session
+from app.tools.image_upload import image_upload
 from ..Schemas import Users as UserSchemas
 from ..Models import Users as UsersModels
-import datetime as dt
-import pytz
 
 
 def get_user_by_email(db: Session, email: str):
@@ -25,3 +26,10 @@ def create_user(db: Session, user: UserSchemas.UserCreate):
     return db_user.user_dict()
 
 
+def update_user_image(db: Session, image, user_id: int):
+    user = get_user(db=db, user_id=user_id)
+    user.image = image_upload(image, 'avatars', user_id)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user.user_dict()

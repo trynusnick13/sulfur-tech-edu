@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from ..Schemas import Courses as CoursesSchemas
 from ..Models import Courses as CoursesModel
 from ..Models import Users as UsersModel
-from ..tools.image_upload import image_upload, image_remove
+from ..tools.image_upload import image_upload
 
 
 def create_course(db: Session, course: CoursesSchemas.CourseCreate, creator_id: int):
@@ -78,7 +78,6 @@ def get_courses_by_creator_id(db: Session,
     return pagination_info
 
 
-# TODO: add deletion all subscriptions and ratings with course delete
 def delete_course(db: Session,
                   user_id,
                   course_id):
@@ -100,7 +99,6 @@ def delete_course(db: Session,
 
     db.delete(db_course)
     db.commit()
-    image_remove(db_course.image)
     return True
 
 
