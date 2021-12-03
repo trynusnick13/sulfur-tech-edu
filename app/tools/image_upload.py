@@ -22,10 +22,10 @@ def image_upload(image_json, folder: str, required_filename=None) -> str:
         required_filename = str(uuid.uuid4().hex) + str(uuid.uuid4())
     image_name = str(required_filename) + '.' + image_extention
     local_path = os.path.join(application.UPLOAD_FOLDER, folder, image_name)
-    with open(local_path, 'wb') as image:
-        data = base64.b64decode(image_json['data'])
-        image.write(data)
-    result = uploader.upload(local_path, overwrite=True, resource_type='image')
+    #with open(local_path, 'wb') as image:
+    #    data = base64.b64decode(image_json['data'])
+    #    image.write(data)
+    result = uploader.upload(open(local_path, 'rb'), overwrite=True, resource_type='image')
     os.remove(local_path)
     print(result['url'])
     return result['url']
